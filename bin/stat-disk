@@ -32,12 +32,12 @@
 SCRIPTVERSION=141214-050104
 
 case `uname -s` in
-	"Darwin")
+	Darwin)
 		df -H / | \
 			grep '/' | \
 			awk '{ print $2,$3,$4 }'
 	;;
-	"FreeBSD")
+	FreeBSD)
 		if ! mount | grep ' / ' | grep '/md' >/dev/null 2>&1 ; then
 			ZPOOLSTAT=$( zpool get -H size,allocated,free \
 				$( \

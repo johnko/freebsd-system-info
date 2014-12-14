@@ -32,17 +32,13 @@
 SCRIPTVERSION=141214-041311
 
 case `uname -s` in
-	"Darwin")
-		exit
+	FreeBSD)
+		if [ -e "/var/log/dhcpd.log" ]; then
+			grep dhcpd /var/log/dhcpd.log | tail -1 | sed -e 's/dhcpd.*dhcpd: //' -e 's/failover peer mygroup: //'
+		fi
+		dhcpdjaillog=$( find /usr/jails/dhcpd*/var/log -name dhcpd.log 2>/dev/null | head -1 )
+		if [ "x" != "x${dhcpdjaillog}" ]; then
+			grep dhcpd ${dhcpdjaillog} | tail -1 | sed -e 's/dhcpd.*dhcpd://' -e 's/failover peer mygroup: //'
+		fi
 	;;
 esac
-
-if [ -e "/var/log/dhcpd.log" ]; then
-	grep dhcpd /var/log/dhcpd.log | tail -1 | sed -e 's/dhcpd.*dhcpd: //' -e 's/failover peer mygroup: //'
-fi
-
-dhcpdjaillog=$( find /usr/jails/dhcpd*/var/log -name dhcpd.log 2>/dev/null | head -1 )
-
-if [ "x" != "x${dhcpdjaillog}" ]; then
-	grep dhcpd ${dhcpdjaillog} | tail -1 | sed -e 's/dhcpd.*dhcpd://' -e 's/failover peer mygroup: //'
-fi

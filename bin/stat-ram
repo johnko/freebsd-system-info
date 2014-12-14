@@ -49,7 +49,7 @@ ram-total() {
 
 ram-totalpage() {
   case `uname -s` in
-    "FreeBSD")
+    FreeBSD)
       # round total ram up
       echo $( sysctl -n vm.stats.vm.v_page_count )" "$( ram-pagesize ) | \
       awk '{ printf "%.1f\n", $1 * $2 }'

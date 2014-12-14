@@ -29,17 +29,22 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-041311
+SCRIPTVERSION=141214-050707
 
 case `uname -s` in
-	"Darwin")
-		exit
-	;;
-	"FreeBSD")
-		if swapinfo | grep -v 'Device.*Used.*Avail' | grep '[0-9]' >/dev/null 2>&1 ; then
-			TOTAL=$( top -b | grep 'Swap:' | egrep -o '[0-9]+[BKMG] Total' | awk '{print $1}' )
-			LINE=$( swapinfo -h | grep -v 'Device.*Used.*Avail' | awk '{print $3,$4}' )
-			echo "${TOTAL} ${LINE}"
+	FreeBSD)
+		if swapinfo | grep -v 'Device.*Used.*Avail' | grep '[0-9]' \
+				>/dev/null 2>&1 ; then
+			LINE=$( swapinfo -h | grep -v 'Device.*Used.*Avail' )
+			USEDZERO=$( echo $LINE | awk '{print $3}' )
+			if [ "$USEDZERO" = "0B" ]; then
+				TOTAL=$( echo $LINE | awk '{print $4}' )
+			else
+				TOTAL=$( top -b | grep 'Swap:' | egrep -o '[0-9]+[BKMG] Total' | \
+					awk '{print $1}' )
+			fi
+			USEDAVAIL=$( echo $LINE | awk '{print $3,$4}' )
+			echo "${TOTAL} ${USEDAVAIL}"
 		fi
 	;;
 esac

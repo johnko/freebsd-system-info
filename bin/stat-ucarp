@@ -31,11 +31,15 @@
 ######################################################################
 SCRIPTVERSION=141214-041311
 
-if pgrep -lf 'ucarp' >/dev/null 2>/dev/null ; then
-	pgrep -lf 'ucarp' | \
-		egrep -o "\-\-(vhid|interface|srcip|addr|adv)[^ ]*" | \
-		sort -r | \
-		sed -e 's#--##' -e 's#ip##' -e 's#interface#nic#' -e 's#=# #' | \
-		tr '\n' ' '
-	echo
-fi
+case `uname -s` in
+  FreeBSD)
+		if pgrep -lf 'ucarp' >/dev/null 2>/dev/null ; then
+			pgrep -lf 'ucarp' | \
+				egrep -o "\-\-(vhid|interface|srcip|addr|adv)[^ ]*" | \
+				sort -r | \
+				sed -e 's#--##' -e 's#ip##' -e 's#interface#nic#' -e 's#=# #' | \
+				tr '\n' ' '
+			echo
+		fi
+	;;
+esac
