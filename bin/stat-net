@@ -53,16 +53,16 @@ net-ip() {
 	  sed -e "s/~/$DELIM/g" -e "s/$DELIM *\$//g"
 }
 
-NICLIST=`ifconfig -l | \
-	sed -E 's/lo[0-9]+//g' | \
-	sed -E 's/plip[0-9]+//g' | \
-	sed -E 's/ipfw[0-9]+//g' | \
-	sed -E 's/enc[0-9]+//g' | \
-	sed -E 's/pflog[0-9]+//g' | \
-	sed -E 's/stf[0-9]+//g' | \
-	sed -E 's/gif[0-9]+//g' | \
-	sed -E 's/fwe[0-9]+//g' | \
-	sed -E 's/fwip[0-9]+//g'`
+NICLIST=`ifconfig -l | tr ' ' '\n' | \
+awk '$1 !~ /lo[0-9]/ && \
+$1 !~ /enc[0-9]/ && \
+$1 !~ /fwe[0-9]/ && \
+$1 !~ /fwip[0-9]/ && \
+$1 !~ /gif[0-9]/ && \
+$1 !~ /ipfw[0-9]/ && \
+$1 !~ /pflog[0-9]/ && \
+$1 !~ /plip[0-9]/ && \
+$1 !~ /stf[0-9]/ {print $1}'`
 
 for a in ${NICLIST} ; do
 	echo "$a `net-mac $a`  `net-ip $a`"
