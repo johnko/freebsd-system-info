@@ -35,7 +35,7 @@ case `uname -s` in
 	FreeBSD)
 		if swapinfo | grep -v 'Device.*Used.*Avail' | grep '[0-9]' \
 				>/dev/null 2>&1 ; then
-			LINE=$( swapinfo -h | grep -v 'Device.*Used.*Avail' )
+			LINE=$( swapinfo -h | tail -1 )
 			USEDZERO=$( echo $LINE | awk '{print $3}' )
 			if [ "$USEDZERO" = "0B" ]; then
 				TOTAL=$( echo $LINE | awk '{print $4}' )
