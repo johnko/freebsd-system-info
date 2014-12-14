@@ -53,6 +53,8 @@ case `uname -s` in
 		uname -r -s
 	;;
 	FreeBSD)
+		freebsd-version | tr -d '\n'
+		echo -n "      "
 		uname -i -p -r -s
 	;;
 esac
