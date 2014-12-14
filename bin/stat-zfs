@@ -1,0 +1,63 @@
+#!/bin/sh
+######################################################################
+# LICENSE pulled in with, cat LICENSE | awk '{print "# "$0}'
+######################################################################
+# Copyright (c) 2014, John Ko
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+######################################################################
+# Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
+######################################################################
+SCRIPTVERSION=141214-040839
+
+ZFSLIST=`zpool status | egrep -o "pool\: ([[:alnum:]-]*)" | awk '{ print $NF }'`
+for a in ${ZFSLIST} ; do
+	if [ ${#a} -lt 10 ]; then
+		tab=""
+		for i in `seq ${#a} 10`; do
+			tab="$tab "
+		done
+	fi
+	echo -n "$a${tab}"
+	echo -n $( zfs list -H -o used,available $a 2>/dev/null )
+	echo -n "  "
+	zpool status ${a} | egrep '(state\:|scan\:|errors\:|status\:|to go|% done)' | \
+		tr '\n' '`' | sed \
+			-e 's/ *pool\: / /g' \
+			-e 's/`/ /g' \
+			-e 's/   */  /g' \
+			-e 's/^ *//g' \
+			-e 's/errors: No known data errors//' \
+			-e 's/ with 0 errors//' \
+			-e 's/ scrub repaired 0 in/ done in/' \
+			-e 's/scrub in progress since/started/' \
+			-e 's/state: ONLINE *//' \
+			-e 's/scan: none requested//' \
+			-e 's/ 0 repaired,//' \
+			-e 's/  / /' \
+			-e 's/[^ ]* scanned/\
+.                       &/' \
+                    -e 's/[^ ]* scan:/\
+.                      &/'
+done

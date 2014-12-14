@@ -1,0 +1,208 @@
+#!/bin/sh
+######################################################################
+# LICENSE pulled in with, cat LICENSE | awk '{print "# "$0}'
+######################################################################
+# Copyright (c) 2014, John Ko
+# All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions are met:
+#
+# * Redistributions of source code must retain the above copyright notice, this
+#   list of conditions and the following disclaimer.
+#
+# * Redistributions in binary form must reproduce the above copyright notice,
+#   this list of conditions and the following disclaimer in the documentation
+#   and/or other materials provided with the distribution.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+# AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+# DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+# SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+# CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+# OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+#
+######################################################################
+# Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
+######################################################################
+SCRIPTVERSION=141214-041311
+
+BINPATH=$HOME/bin
+
+line="DATE `date '+%Y-%m-%d %H:%M:%S %Z%z'`"
+echo -n "$line"
+if [ ${#line} -lt 40 ]; then
+	tab=""
+	for i in `seq ${#line} 40`; do
+		tab="$tab "
+	done
+fi
+echo -n "$tab"
+echo "HOST `hostname -f`"
+
+if [ -x ${BINPATH}/stat-gpg ]; then
+	${BINPATH}/stat-gpg
+fi
+
+case `uname -s` in
+	Darwin)
+		uname -r -s
+	;;
+	FreeBSD)
+		uname -i -p -r -s
+	;;
+esac
+
+if [ -x ${BINPATH}/ssh-finger-rsa ]; then
+	echo "SSHR `${BINPATH}/ssh-finger-rsa`"
+	case `uname -s` in
+		FreeBSD)
+			if [ -x ${BINPATH}/ssh-finger-ecdsa ]; then
+				echo "SSHE `${BINPATH}/ssh-finger-ecdsa`"
+			fi
+		;;
+	esac
+fi
+
+if [ -x ${BINPATH}/stat-cpu ]; then
+	line="CPU  `${BINPATH}/stat-cpu`"
+	echo -n "$line"
+	if [ ${#line} -lt 40 ]; then
+		tab=""
+		for i in `seq ${#line} 40`; do
+			tab="$tab "
+		done
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-up ]; then
+	echo -n "$tab"
+	echo "UPT  `${BINPATH}/stat-up`"
+fi
+
+if [ -x ${BINPATH}/stat-ram ]; then
+	line="RAM  `${BINPATH}/stat-ram`"
+	echo -n "$line"
+	if [ ${#line} -lt 40 ]; then
+		tab=""
+		for i in `seq ${#line} 40`; do
+			tab="$tab "
+		done
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-usr ]; then
+	echo -n "$tab"
+	echo "USR  `${BINPATH}/stat-usr`"
+fi
+
+if [ -x ${BINPATH}/stat-disk ]; then
+	line="HDD  `${BINPATH}/stat-disk`"
+	echo -n "$line"
+	if [ ${#line} -lt 40 ]; then
+		tab=""
+		for i in `seq ${#line} 40`; do
+			tab="$tab "
+		done
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-who ]; then
+	echo -n "$tab"
+	echo "WHO  `${BINPATH}/stat-who`"
+fi
+
+if [ -x ${BINPATH}/stat-swap ]; then
+	count=0
+	${BINPATH}/stat-swap | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "SWAP "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-zfs ]; then
+	count=0
+	${BINPATH}/stat-zfs | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "ZFS  "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-ucarp ]; then
+	count=0
+	${BINPATH}/stat-ucarp | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "CARP "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-net ]; then
+	count=0
+	${BINPATH}/stat-net | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "NET  "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-dhcpd ]; then
+	count=0
+	${BINPATH}/stat-dhcpd | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "DHCP "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-jail ]; then
+	count=0
+	${BINPATH}/stat-jail | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "JAIL "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/netconn ]; then
+	count=0
+	${BINPATH}/netconn -a | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "CON  "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
