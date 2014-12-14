@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-041311
+SCRIPTVERSION=141214-050104
 
 case `uname -s` in
 	"Darwin")
@@ -38,17 +38,16 @@ case `uname -s` in
 			awk '{ print $2,$3,$4 }'
 	;;
 	"FreeBSD")
-		if ! mount | grep ' / ' | grep '/md'  >/dev/null 2>&1 ; then
-			ZPOOLSTAT=$( zpool get size,allocated,free \
+		if ! mount | grep ' / ' | grep '/md' >/dev/null 2>&1 ; then
+			ZPOOLSTAT=$( zpool get -H size,allocated,free \
 				$( \
 					df -H / | \
 						grep '/' | \
 						grep -v tmpfs | \
 						awk -F'/' '{print $1}' \
 				) | \
-				grep -v 'NAME.*PROPERTY.*VALUE' | \
-					awk '{ printf "%s ", $3 }' | \
-					sed 's# $##'
+				awk '{ printf "%s ", $3 }' | \
+				sed 's# $##'
 			)
 		fi
 		if [ "x" = "x${ZPOOLSTAT}" ]; then
