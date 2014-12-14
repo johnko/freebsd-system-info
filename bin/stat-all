@@ -58,20 +58,20 @@ case `uname -s` in
 esac
 
 if [ -x ${BINPATH}/ssh-finger ]; then
-	echo "SSHR `${BINPATH}/ssh-finger`"
+	echo "RSA  `${BINPATH}/ssh-finger`"
 fi
 
 if [ -x ${BINPATH}/ssh-finger-dsa ]; then
-	echo "SSHR `${BINPATH}/ssh-finger-dsa`"
+	echo "DSA  `${BINPATH}/ssh-finger-dsa`"
 fi
 
 case `uname -s` in
 	FreeBSD)
 		if [ -x ${BINPATH}/ssh-finger-ecdsa ]; then
-			echo "SSHE `${BINPATH}/ssh-finger-ecdsa`"
+			echo "ECD  `${BINPATH}/ssh-finger-ecdsa`"
 		fi
 		if [ -x ${BINPATH}/ssh-finger-ed25519 ]; then
-			echo "SSHE `${BINPATH}/ssh-finger-ed25519`"
+			echo "ED2  `${BINPATH}/ssh-finger-ed25519`"
 		fi
 	;;
 esac
