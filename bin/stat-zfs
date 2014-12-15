@@ -29,9 +29,9 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141215-073155
+SCRIPTVERSION=141215-074133
 
-NUMCHARACTERS=15
+NUMCHARACTERS=12
 
 ZFSLIST=`zpool status | egrep -o "pool\: ([[:alnum:]-]*)" | awk '{ print $NF }'`
 for a in ${ZFSLIST} ; do
@@ -43,12 +43,13 @@ for a in ${ZFSLIST} ; do
 	fi
 	echo -n "$a${tab}"
 	echo -n $( zfs list -H -o used,available $a 2>/dev/null )
-	echo -n "  "
+	echo -n " "
 	zpool status ${a} | egrep '(state\:|scan\:|errors\:|status\:|to go|% done)' | \
 		tr '\n' '`' | sed \
 			-e 's/ *pool\: / /g' \
 			-e 's/`/ /g' \
-			-e 's/   */  /g' \
+			-e 's/   */ /g' \
+			-e 's/  */ /g' \
 			-e 's/^ *//g' \
 			-e 's/errors: No known data errors//' \
 			-e 's/ with 0 errors//' \
@@ -56,6 +57,7 @@ for a in ${ZFSLIST} ; do
 			-e 's/scrub in progress since/started/' \
 			-e 's/state: ONLINE *//' \
 			-e 's/scan: none requested//' \
+			-e 's/scan: done/scanned/' \
 			-e 's/ 0 repaired,//' \
 			-e 's/  / /' \
 			-e 's/[^ ]* scanned/\
