@@ -60,6 +60,8 @@ for a in ${ZFSLIST} ; do
 			-e 's/out of/of/' \
 			-e 's/to go/left,/' \
 			-e 's/ 0 repaired,//' \
+			-e 's/resilvered [0-9\.]*[A-Z] in/done/' \
+			-e 's/One or more devices is currently being resilvered. The pool will/currently being resilvered/' \
 			-e 's/  / /' \
 			-e 's/ Mon / /' \
 			-e 's/ Tue / /' \
