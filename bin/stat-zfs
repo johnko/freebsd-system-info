@@ -29,13 +29,15 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-040839
+SCRIPTVERSION=141215-072259
+
+NUMCHARACTERS=15
 
 ZFSLIST=`zpool status | egrep -o "pool\: ([[:alnum:]-]*)" | awk '{ print $NF }'`
 for a in ${ZFSLIST} ; do
-	if [ ${#a} -lt 10 ]; then
+	if [ ${#a} -lt $NUMCHARACTERS ]; then
 		tab=""
-		for i in `seq ${#a} 15`; do
+		for i in `seq ${#a} $NUMCHARACTERS`; do
 			tab="$tab "
 		done
 	fi
