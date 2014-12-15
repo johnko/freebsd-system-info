@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141215-075454
+SCRIPTVERSION=141215-082421
 
 NUMCHARACTERS=12
 
@@ -61,7 +61,7 @@ for a in ${ZFSLIST} ; do
 			-e 's/to go/left,/' \
 			-e 's/ 0 repaired,//' \
 			-e 's/resilvered [0-9\.]*[A-Z] in/done/' \
-			-e 's/One or more devices is currently being resilvered. The pool will/currently being resilvered/' \
+			-e 's/One or more devices is currently being resilvered. The pool will/RESILVERING/' \
 			-e 's/  / /' \
 			-e 's/ Mon / /' \
 			-e 's/ Tue / /' \
@@ -73,5 +73,5 @@ for a in ${ZFSLIST} ; do
 			-e 's/[^ ]* scanned/\
 .       &/' \
 			-e 's/[^ ]* scan:/\
-.       &/'
+.       scan:/'
 done
