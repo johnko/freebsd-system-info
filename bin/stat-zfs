@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141215-072623
+SCRIPTVERSION=141215-073155
 
 NUMCHARACTERS=15
 
@@ -59,7 +59,7 @@ for a in ${ZFSLIST} ; do
 			-e 's/ 0 repaired,//' \
 			-e 's/  / /' \
 			-e 's/[^ ]* scanned/\
-.               &/' \
+.       &/' \
 			-e 's/[^ ]* scan:/\
-.               &/'
+.       &/'
 done
