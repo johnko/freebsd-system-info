@@ -35,7 +35,7 @@ ZFSLIST=`zpool status | egrep -o "pool\: ([[:alnum:]-]*)" | awk '{ print $NF }'`
 for a in ${ZFSLIST} ; do
 	if [ ${#a} -lt 10 ]; then
 		tab=""
-		for i in `seq ${#a} 10`; do
+		for i in `seq ${#a} 15`; do
 			tab="$tab "
 		done
 	fi
