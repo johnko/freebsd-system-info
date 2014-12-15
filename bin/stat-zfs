@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is YYmmdd-HHMM in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141215-074715
+SCRIPTVERSION=141215-074853
 
 NUMCHARACTERS=12
 
@@ -57,7 +57,8 @@ for a in ${ZFSLIST} ; do
 			-e 's/scrub in progress since/started/' \
 			-e 's/state: ONLINE *//' \
 			-e 's/scan: none requested//' \
-			-e 's/ scan: done in/, scanned/' \
+			-e 's/scan: done in/, scanned/' \
+			-e 's/ ,/,/' \
 			-e 's/out of/of/' \
 			-e 's/to go/left,/' \
 			-e 's/ 0 repaired,//' \
