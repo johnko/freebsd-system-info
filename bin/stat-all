@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-174717
+SCRIPTVERSION=150111-000815
 
 BINPATH=$HOME/bin
 
@@ -60,20 +60,32 @@ case `uname -s` in
 esac
 
 if [ -x ${BINPATH}/ssh-finger ]; then
-	echo "RSA  `${BINPATH}/ssh-finger`"
+	RSA="`${BINPATH}/ssh-finger`"
+	if [ -n "$RSA" ]; then
+		echo "RSA  $RSA"
+	fi
 fi
 
 if [ -x ${BINPATH}/ssh-finger-dsa ]; then
-	echo "DSA  `${BINPATH}/ssh-finger-dsa`"
+	DSA="`${BINPATH}/ssh-finger-dsa`"
+	if [ -n "$DSA" ]; then
+		echo "DSA  $DSA"
+	fi
 fi
 
 case `uname -s` in
 	FreeBSD)
 		if [ -x ${BINPATH}/ssh-finger-ecdsa ]; then
-			echo "ECD  `${BINPATH}/ssh-finger-ecdsa`"
+			ECD="`${BINPATH}/ssh-finger-ecdsa`"
+			if [ -n "$ECD" ]; then
+				echo "ECD  $ECD"
+			fi
 		fi
 		if [ -x ${BINPATH}/ssh-finger-ed25519 ]; then
-			echo "ED2  `${BINPATH}/ssh-finger-ed25519`"
+			ED2="`${BINPATH}/ssh-finger-ed25519`"
+			if [ -n "$ED2" ]; then
+				echo "ED2  $ED2"
+			fi
 		fi
 	;;
 esac
