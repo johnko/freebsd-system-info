@@ -2,7 +2,7 @@
 ######################################################################
 # LICENSE pulled in with, cat LICENSE | awk '{print "# "$0}'
 ######################################################################
-# Copyright (c) 2014, John Ko
+# Copyright (c) 2014-2015, John Ko
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -29,8 +29,8 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141220-062847
+SCRIPTVERSION=150329-031605
 
 SEDARGS=`glabel status | grep -v 'Name.*Components' | awk '{print "-es,"$1","$3","}'`
 
-zpool status | sed $SEDARGS
+zpool status $1 | sed $SEDARGS
