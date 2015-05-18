@@ -1,0 +1,5 @@
+#!/bin/sh
+
+#http://serverfault.com/questions/533877/how-large-is-my-zfs-dedupe-table-at-the-moment/533880#533880
+
+echo dedup table: `zpool status -D tank | grep dedup | tr -d ',' | awk '{print $4"*"$9"/1024/1024"}' | bc` MB
