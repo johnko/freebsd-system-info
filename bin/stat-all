@@ -93,9 +93,9 @@ esac
 if [ -x ${BINPATH}/stat-cpu ]; then
 	line="CPU  `${BINPATH}/stat-cpu`"
 	echo -n "$line"
-	if [ ${#line} -lt 40 ]; then
+	if [ ${#line} -lt 30 ]; then
 		tab=""
-		for i in `seq ${#line} 40`; do
+		for i in `seq ${#line} 30`; do
 			tab="$tab "
 		done
 	fi
@@ -109,9 +109,9 @@ fi
 if [ -x ${BINPATH}/stat-ram ]; then
 	line="RAM  `${BINPATH}/stat-ram`"
 	echo -n "$line"
-	if [ ${#line} -lt 40 ]; then
+	if [ ${#line} -lt 30 ]; then
 		tab=""
-		for i in `seq ${#line} 40`; do
+		for i in `seq ${#line} 30`; do
 			tab="$tab "
 		done
 	fi
@@ -125,9 +125,9 @@ fi
 if [ -x ${BINPATH}/stat-disk ]; then
 	line="HDD  `${BINPATH}/stat-disk`"
 	echo -n "$line"
-	if [ ${#line} -lt 40 ]; then
+	if [ ${#line} -lt 30 ]; then
 		tab=""
-		for i in `seq ${#line} 40`; do
+		for i in `seq ${#line} 30`; do
 			tab="$tab "
 		done
 	fi
@@ -141,9 +141,9 @@ fi
 if [ -x ${BINPATH}/stat-swap ]; then
 	line="SWAP `${BINPATH}/stat-swap`"
 	echo -n "$line"
-	if [ ${#line} -lt 40 ]; then
+	if [ ${#line} -lt 30 ]; then
 		tab=""
-		for i in `seq ${#line} 40`; do
+		for i in `seq ${#line} 30`; do
 			tab="$tab "
 		done
 	fi
