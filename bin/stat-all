@@ -139,16 +139,14 @@ if [ -x ${BINPATH}/stat-who ]; then
 fi
 
 if [ -x ${BINPATH}/stat-swap ]; then
-	count=0
-	${BINPATH}/stat-swap | while read line; do
-		count=$(( count + 1 ))
-		if [ $count -eq 1 ]; then
-			echo -n "SWAP "
-		else
-			echo -n "     "
-		fi
-		echo "$line"
-	done
+	line="SWAP `${BINPATH}/stat-swap`"
+	echo -n "$line"
+	if [ ${#line} -lt 40 ]; then
+		tab=""
+		for i in `seq ${#line} 40`; do
+			tab="$tab "
+		done
+	fi
 fi
 
 if [ -x ${BINPATH}/stat-temperature ]; then
