@@ -29,10 +29,10 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150519-145831
+SCRIPTVERSION=150519-150430
 
 case `uname -s` in
 	FreeBSD)
-        sysctl -a | grep temperature | awk '{print $NF}'
+        sysctl -a | grep temperature | awk '{print $NF}' | tr '\n' ' '
 	;;
 esac
