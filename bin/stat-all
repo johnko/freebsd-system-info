@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150111-000815
+SCRIPTVERSION=150519-145831
 
 BINPATH=$HOME/bin
 
@@ -149,6 +149,11 @@ if [ -x ${BINPATH}/stat-swap ]; then
 		fi
 		echo "$line"
 	done
+fi
+
+if [ -x ${BINPATH}/stat-temperature ]; then
+	echo -n "$tab"
+	echo "HEAT `${BINPATH}/stat-temperature`"
 fi
 
 if [ -x ${BINPATH}/stat-zfs ]; then
