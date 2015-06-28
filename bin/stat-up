@@ -29,7 +29,8 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-041311
+SCRIPTVERSION=150628-034000
 
-uptime | \
-  egrep -o "up[^,]*"
+uptime \
+| egrep -o "up[^,]*" \
+| sed 's;up  *;;'
