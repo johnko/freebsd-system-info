@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-011632
+SCRIPTVERSION=150628-014343
 
 BINPATH=$HOME/bin
 
@@ -54,7 +54,7 @@ case `uname -s` in
 	;;
 	FreeBSD)
 		uname -i -p -r -s | tr -d '\n'
-		echo -n "       "
+		echo -n "        "
 		freebsd-version
 	;;
 esac
