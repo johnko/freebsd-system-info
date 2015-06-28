@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-035040
+SCRIPTVERSION=150628-035518
 
 NUMCHARACTERS=12
 
@@ -53,7 +53,7 @@ for a in ${ZFSLIST} ; do
 			-e 's/errors: No known data errors//' \
 			-e 's/ with 0 errors//' \
 			-e 's/ scrub repaired 0 in/ done in/' \
-			-e 's/scrub in progress since/started/' \
+			-e 's/scrub in progress since/started on/' \
 			-e 's/state: ONLINE *//' \
 			-e 's/scan: none requested//' \
 			-e 's/done in/done/' \
@@ -71,7 +71,7 @@ for a in ${ZFSLIST} ; do
 			-e 's/ Sat / /' \
 			-e 's/ Sun / /' \
 			-e 's/[^ ]* scanned/\
-. . . &/' \
+. . . . &/' \
 			-e 's/[^ ]* left/\
 . . . &/' \
 			-e 's/[^ ]* resilver in/\
