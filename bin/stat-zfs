@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-040658
+SCRIPTVERSION=150628-040943
 
 NUMCHARACTERS=12
 
@@ -78,6 +78,7 @@ for a in ${ZFSLIST} ; do
             -e 's/scanned  *of//' \
             -e 's/ on / /' \
             -e 's/scrub in progress since/started on/' \
-            -e 's/scan://'
+            -e 's/scan://' \
+            -e 's/ at / /'
 done \
 | column -t
