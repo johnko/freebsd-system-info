@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-003628
+SCRIPTVERSION=150628-003736
 
 net-mac() {
 	DELIM=':'
@@ -43,7 +43,7 @@ net-mac() {
 }
 
 net-ip() {
-	DELIM=,
+	DELIM=" "
 	NIC=$1
 	ifconfig ${NIC} \
 	    | egrep inet \
