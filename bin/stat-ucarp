@@ -29,17 +29,16 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-041311
+SCRIPTVERSION=150628-003107
 
 case `uname -s` in
   FreeBSD)
 		if pgrep -lf 'ucarp' >/dev/null 2>/dev/null ; then
-			pgrep -lf 'ucarp' | \
-				egrep -o "\-\-(vhid|interface|srcip|addr|adv)[^ ]*" | \
-				sort -r | \
-				sed -e 's#--##' -e 's#ip##' -e 's#interface#nic#' -e 's#=# #' | \
-				tr '\n' ' '
-			echo
+			pgrep -lf '/usr/local/sbin/ucarp' \
+			| grep -v 'sed' \
+			| sed -e 's;-[Bza] ;;g' -e 's;-[ivfudsp] [^ ]*;;g' -e 's;[0-9][0-9]* /usr/local/sbin/ucarp;;g' \
+			| awk '{print $2,$1}' \
+			| sort -u
 		fi
 	;;
 esac
