@@ -29,32 +29,33 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=141214-041311
+SCRIPTVERSION=150628-003628
 
 net-mac() {
 	DELIM=':'
 	NIC=$1
-	ifconfig ${NIC} | \
-	  egrep -io "([0-9a-f]{2}:){5}[0-9a-f]{2}" | \
-	  grep -v "00:00:00:00:00:00" | \
-	  tr ':' '~' | \
-	  sed -e "s/~/$DELIM/g" | \
-    sort -u
+	ifconfig ${NIC} \
+	    | egrep -io "([0-9a-f]{2}:){5}[0-9a-f]{2}" \
+	    | grep -v "00:00:00:00:00:00" \
+	    | tr ':' '~' \
+	    | sed -e "s/~/$DELIM/g" \
+        | sort -u
 }
 
 net-ip() {
 	DELIM=,
 	NIC=$1
-	ifconfig ${NIC} | \
-	  egrep inet | \
-	  sed -e 's/broadcast.*//g' -e 's/netmask.*//g' | \
-	  egrep -o "([0-9]{1,3}\.){3}[0-9]{1,3}" | \
-	  tr '\n' '~' | \
-	  sed -e "s/~/$DELIM/g" -e "s/$DELIM *\$//g"
+	ifconfig ${NIC} \
+	    | egrep inet \
+	    | sed -e 's/broadcast.*//g' -e 's/netmask.*//g' \
+	    | egrep -o "([0-9]{1,3}\.){3}[0-9]{1,3}" \
+	    | sort -u \
+	    | tr '\n' '~' \
+	    | sed -e "s/~/$DELIM/g" -e "s/$DELIM *\$//g"
 }
 
-NICLIST=`ifconfig -l | tr ' ' '\n' | \
-awk '$1 !~ /lo[0-9]/ && \
+NICLIST=`ifconfig -l | tr ' ' '\n' \
+| awk '$1 !~ /lo[0-9]/ && \
 $1 !~ /enc[0-9]/ && \
 $1 !~ /fwe[0-9]/ && \
 $1 !~ /fwip[0-9]/ && \
