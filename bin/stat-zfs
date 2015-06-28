@@ -29,54 +29,55 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-035958
+SCRIPTVERSION=150628-040658
 
 NUMCHARACTERS=12
 
 ZFSLIST=`zpool status | egrep -o "pool\: ([[:alnum:]-]*)" | awk '{ print $NF }'`
 for a in ${ZFSLIST} ; do
-	if [ ${#a} -lt $NUMCHARACTERS ]; then
-		tab=""
-		for i in `seq ${#a} $NUMCHARACTERS`; do
-			tab="$tab "
-		done
-	fi
-	echo -n "$a${tab}"
-	echo -n $( zfs list -H -o used,available $a 2>/dev/null )
-	echo -n " "
-	zpool status ${a} | egrep '(state\:|scan\:|errors\:|status\:|to go|% done)' | \
-		tr '\n' '`' | sed \
-			-e 's/ *pool\: / /g' \
-			-e 's/`/ /g' \
-			-e 's/  */ /g' \
-			-e 's/^ *//g' \
-			-e 's/errors: No known data errors//' \
-			-e 's/ with 0 errors//' \
-			-e 's/ scrub repaired 0 in/ done in/' \
-			-e 's/state: ONLINE *//' \
-			-e 's/scan: none requested//' \
-			-e 's/done in/done/' \
-			-e 's/out of/of/' \
-			-e 's/to go/left,/' \
-			-e 's/ 0 repaired,//' \
-			-e 's/resilvered [0-9\.]*[A-Z] in/done/' \
-			-e 's/One or more devices is currently being resilvered. The pool will/RESILVERING/' \
-			-e 's/  / /' \
-			-e 's/ Mon / /' \
-			-e 's/ Tue / /' \
-			-e 's/ Wed / /' \
-			-e 's/ Thu / /' \
-			-e 's/ Fri / /' \
-			-e 's/ Sat / /' \
-			-e 's/ Sun / /' \
-			-e 's/[^ ]* scanned/\
+    if [ ${#a} -lt $NUMCHARACTERS ]; then
+        tab=""
+        for i in `seq ${#a} $NUMCHARACTERS`; do
+            tab="$tab "
+        done
+    fi
+    echo -n "$a${tab}"
+    echo -n $( zfs list -H -o used,available $a 2>/dev/null )
+    echo -n " "
+    zpool status ${a} | egrep '(state\:|scan\:|errors\:|status\:|to go|% done)' | \
+        tr '\n' '`' | sed \
+            -e 's/ *pool\: / /g' \
+            -e 's/`/ /g' \
+            -e 's/  */ /g' \
+            -e 's/^ *//g' \
+            -e 's/errors: No known data errors//' \
+            -e 's/ with 0 errors//' \
+            -e 's/ scrub repaired 0 in/ done in/' \
+            -e 's/state: ONLINE *//' \
+            -e 's/scan: none requested//' \
+            -e 's/done in/done/' \
+            -e 's/out of/of/' \
+            -e 's/to go/left,/' \
+            -e 's/ 0 repaired,//' \
+            -e 's/resilvered [0-9\.]*[A-Z] in/done/' \
+            -e 's/One or more devices is currently being resilvered. The pool will/RESILVERING/' \
+            -e 's/  / /' \
+            -e 's/ Mon / /' \
+            -e 's/ Tue / /' \
+            -e 's/ Wed / /' \
+            -e 's/ Thu / /' \
+            -e 's/ Fri / /' \
+            -e 's/ Sat / /' \
+            -e 's/ Sun / /' \
+            -e 's/[^ ]* scanned/\
 . . . &/' \
-			-e 's/[^ ]* left/\
+            -e 's/[^ ]* left/\
 . . . &/' \
-			-e 's/[^ ]* resilver in/\
+            -e 's/[^ ]* resilver in/\
 . &/' \
             -e 's/scanned  *of//' \
             -e 's/ on / /' \
-	        -e 's/scrub in progress since/started on/'
+            -e 's/scrub in progress since/started on/' \
+            -e 's/scan://'
 done \
 | column -t
