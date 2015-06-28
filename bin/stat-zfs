@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-034551
+SCRIPTVERSION=150628-034754
 
 NUMCHARACTERS=12
 
@@ -71,11 +71,11 @@ for a in ${ZFSLIST} ; do
 			-e 's/ Sat / /' \
 			-e 's/ Sun / /' \
 			-e 's/[^ ]* scanned/\
-. .       &/' \
+. . . . &/' \
 			-e 's/[^ ]* left/\
-. .       &/' \
+. &/' \
 			-e 's/[^ ]* resilver in/\
-. .       &/' \
+. &/' \
             -e 's/scanned  *of//' \
             -e 's/ on / /'
 done \
