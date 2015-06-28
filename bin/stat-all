@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-014912
+SCRIPTVERSION=150628-015105
 
 BINPATH=$HOME/bin
 
@@ -186,9 +186,9 @@ if [ -x ${BINPATH}/stat-ucarp ]; then
 	${BINPATH}/stat-ucarp | while read line; do
 		count=$(( count + 1 ))
 		if [ $count -eq 1 ]; then
-			echo -n "CARP "
+			echo -n "CARP  "
 		else
-			echo -n "     "
+			echo -n "      "
 		fi
 		echo "$line"
 	done
@@ -212,9 +212,9 @@ if [ -x ${BINPATH}/stat-dhcpd ]; then
 	${BINPATH}/stat-dhcpd | while read line; do
 		count=$(( count + 1 ))
 		if [ $count -eq 1 ]; then
-			echo -n "DHCP "
+			echo -n "DHCP  "
 		else
-			echo -n "     "
+			echo -n "      "
 		fi
 		echo "$line"
 	done
@@ -225,9 +225,9 @@ if [ -x ${BINPATH}/stat-jail ]; then
 	${BINPATH}/stat-jail | while read line; do
 		count=$(( count + 1 ))
 		if [ $count -eq 1 ]; then
-			echo -n "JAIL "
+			echo -n "JAIL  "
 		else
-			echo -n "     "
+			echo -n "      "
 		fi
 		echo "$line"
 	done
