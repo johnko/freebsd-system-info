@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150628-014343
+SCRIPTVERSION=150628-014754
 
 BINPATH=$HOME/bin
 
@@ -50,11 +50,19 @@ fi
 
 case `uname -s` in
 	Darwin)
-		uname -r -s
+		line=`uname -r -s`
+		echo "$line"
 	;;
 	FreeBSD)
-		uname -i -p -r -s | tr -d '\n'
-		echo -n "        "
+		line=`uname -i -p -r -s | tr -d '\n'`
+		echo -n "$line"
+		if [ ${#line} -lt 46 ]; then
+			tab=""
+			for i in `seq ${#line} 30`; do
+				tab="$tab "
+			done
+		fi
+		echo -n "$tab"
 		freebsd-version
 	;;
 esac
