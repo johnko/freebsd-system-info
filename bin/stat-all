@@ -29,7 +29,7 @@
 ######################################################################
 # Script version is yymmdd-HHMMSS in UTC, date +%y%m%d-%H%M%S
 ######################################################################
-SCRIPTVERSION=150519-150430
+SCRIPTVERSION=150628-011632
 
 BINPATH=$HOME/bin
 
@@ -90,6 +90,8 @@ case `uname -s` in
 	;;
 esac
 
+tablestat() {
+
 if [ -x ${BINPATH}/stat-cpu ]; then
 	line="CPU  `${BINPATH}/stat-cpu`"
 	echo -n "$line"
@@ -103,7 +105,7 @@ fi
 
 if [ -x ${BINPATH}/stat-temperature ]; then
 	echo -n "$tab"
-	echo "HEAT `${BINPATH}/stat-temperature`"
+	echo ". HEAT `${BINPATH}/stat-temperature`"
 fi
 
 if [ -x ${BINPATH}/stat-ram ]; then
@@ -119,7 +121,7 @@ fi
 
 if [ -x ${BINPATH}/stat-up ]; then
 	echo -n "$tab"
-	echo "UPT  `${BINPATH}/stat-up`"
+	echo ". UPT  `${BINPATH}/stat-up`"
 fi
 
 if [ -x ${BINPATH}/stat-disk ]; then
@@ -135,7 +137,7 @@ fi
 
 if [ -x ${BINPATH}/stat-usr ]; then
 	echo -n "$tab"
-	echo "USR  `${BINPATH}/stat-usr`"
+	echo ". USR  `${BINPATH}/stat-usr`"
 fi
 
 if [ -x ${BINPATH}/stat-swap ]; then
@@ -151,8 +153,12 @@ fi
 
 if [ -x ${BINPATH}/stat-who ]; then
 	echo -n "$tab"
-	echo "WHO  `${BINPATH}/stat-who`"
+	echo ". WHO  `${BINPATH}/stat-who`"
 fi
+
+}
+
+tablestat | column -t
 
 if [ -x ${BINPATH}/stat-zfs ]; then
 	count=0
