@@ -2,22 +2,19 @@
 
 case `uname -s` in
 	FreeBSD)
-		jls | grep -v 'JID.*IP Address.*Hostname.*Path' | awk '{print $2,$3}' | while read line ; do
-			if [ "x" != "x${line}" ]; then
-				search=$( echo "${line}" | awk '{print $2}' )
-				if [ "x" = "x${search}" ]; then
-					echo "${line}"
+		SEDARGS=`iocage list | grep -v 'JID.*TAG' | awk '{print "-es,"$2","$5","}'`
+		jls | grep -v 'JID.*IP Address.*Hostname.*Path' | awk '{print $2,$4}' | while read ip path ; do
+			if [ "x" != "x${ip}" ] && [ "x" != "x${path}" ]; then
+				name=$( echo ${path} | sed -e 's;^.*/jails/;;' -e 's;/root$;;' )
+				zfslist=$( zfs list -H -o name,used tank/iocage/jails/${name} 2> /dev/null )
+				#zfslist=$( grep tank/ezjail/${search} /server/zfs/zl.txt )
+				if [ "x" = "x${zfslist}" ]; then
+					echo "${ip} ${name}"
 				else
-					zfslist=$( zfs list -H -o name,used tank/iocage/jails/${search} 2> /dev/null )
-					#zfslist=$( grep tank/ezjail/${search} /server/zfs/zl.txt )
-					if [ "x" = "x${zfslist}" ]; then
-						echo "${line}"
-					else
-						used=$( echo "${zfslist}" | awk '{print $2}' )
-						echo "${line} ${used}"
-					fi
+					used=$( echo "${zfslist}" | awk '{print $2}' )
+					echo "${ip} ${name} ${used}"
 				fi
 			fi
-		done | sort | column -t
+		done | sed ${SEDARGS} | sort | column -t
 	;;
 esac
