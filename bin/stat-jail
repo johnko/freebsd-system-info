@@ -3,14 +3,12 @@
 case `uname -s` in
 	FreeBSD)
 		jls | grep -v 'JID.*IP Address.*Hostname.*Path' | awk '{print $2,$3}' | while read line ; do
-			if echo "${line}" | grep '100amd64-default' >/dev/null 2>&1 ; then
-				echo "${line}"
-			else
+			if [ "x" != "x${line}" ]; then
 				search=$( echo "${line}" | awk '{print $2}' )
 				if [ "x" = "x${search}" ]; then
 					echo "${line}"
 				else
-					zfslist=$( zfs list -H -o name,used tank/ezjail/${search} 2> /dev/null )
+					zfslist=$( zfs list -H -o name,used tank/iocage/jails/${search} 2> /dev/null )
 					#zfslist=$( grep tank/ezjail/${search} /server/zfs/zl.txt )
 					if [ "x" = "x${zfslist}" ]; then
 						echo "${line}"

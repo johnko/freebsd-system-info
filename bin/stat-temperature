@@ -2,6 +2,6 @@
 
 case `uname -s` in
 	FreeBSD)
-        sysctl -a | grep temperature | grep -v suggest | awk '{print $NF}' | sort -u | tr '\n' ' '
+        sysctl dev.cpu | grep temperature | grep -v suggest | awk '{print $NF}' | sort -u | tr '\n' ' '
 	;;
 esac
