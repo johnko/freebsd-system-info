@@ -196,8 +196,13 @@ fi
 
 if [ -x ${BINPATH}/netconn ]; then
 	count=0
-	${BINPATH}/netconn -a \
-	| sed 's;ADDRESS;;g' | awk '{$4="";print}' | column -t \
+	${BINPATH}/netconn \
+	| sed 's;ADDRESS;;g' | awk '{$4="";print}' \
+	| grep -v '^_ntp' \
+	| grep -v '^root *sendmail.*127.0.0.1:25' \
+	| grep -v '^root *syslogd.*127.0.0.1:514' \
+	| grep -v '^root *sshd.*\*:22' \
+	| column -t \
 	| while read line; do
 		count=$(( count + 1 ))
 		if [ $count -eq 1 ]; then
