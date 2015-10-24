@@ -198,11 +198,11 @@ if [ -x ${BINPATH}/netconn ]; then
 	count=0
 	${BINPATH}/netconn \
 	| sed 's;ADDRESS;;g' | awk '{$4="";print}' \
-	| grep -v '^_ntp\s*ntpd.*:123$' \
-	| grep -v '^root\s*sendmail.*127.0.0.1:25' \
-	| grep -v '^root\s*syslogd.*127.0.0.1:514' \
-	| grep -v '^root\s*sshd.*\*:22' \
-	| grep -v '^root\s*ucarp.*udp4\s*\*:\*\s*\*:\*\s*$' \
+	| grep -v '^_ntp *ntpd.*:123$' \
+	| grep -v '^root *sendmail.*127.0.0.1:25' \
+	| grep -v '^root *syslogd.*127.0.0.1:514' \
+	| grep -v '^root *sshd.*\*:22' \
+	| grep -v '^root *ucarp.*udp4 *\*:\* *\*:\*\s*$' \
 	| column -t \
 	| while read line; do
 		count=$(( count + 1 ))
