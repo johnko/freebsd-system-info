@@ -198,7 +198,7 @@ if [ -x ${BINPATH}/netconn ]; then
 	count=0
 	${BINPATH}/netconn \
 	| sed 's;ADDRESS;;g' | awk '{$4="";print}' \
-	| grep -v '^_ntp' \
+	| grep -v '^_ntp *ntpd.*:123$' \
 	| grep -v '^root *sendmail.*127.0.0.1:25' \
 	| grep -v '^root *syslogd.*127.0.0.1:514' \
 	| grep -v '^root *sshd.*\*:22' \
