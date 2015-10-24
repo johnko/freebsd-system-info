@@ -73,7 +73,7 @@ if [ -x ${BINPATH}/stat-cpu ]; then
 	line="CPU  `${BINPATH}/stat-cpu`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
-		tab=". . ."
+		tab=". . . "
 	fi
 fi
 
@@ -86,7 +86,7 @@ if [ -x ${BINPATH}/stat-ram ]; then
 	line="RAM  `${BINPATH}/stat-ram`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
-		tab=". . ."
+		tab=". . . "
 	fi
 fi
 
@@ -99,7 +99,7 @@ if [ -x ${BINPATH}/stat-disk ]; then
 	line="HDD  `${BINPATH}/stat-disk`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
-		tab=". . ."
+		tab=". . . "
 	fi
 fi
 
@@ -112,7 +112,7 @@ if [ -x ${BINPATH}/stat-swap ]; then
 	line="SWAP `${BINPATH}/stat-swap`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
-		tab=". . ."
+		tab=". . . "
 	fi
 fi
 
