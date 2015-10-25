@@ -10,9 +10,12 @@ status_line()
         -e 's/ *scan:  *resilvered  *[0-9][0-9]*[A-Z] in */done /g' \
         -e 's/ *scan:  *scrub  *repaired 0 in */done /g' \
         -e 's/ *scan:  *//g' \
-        -e 's/in progress since/since/g' \
+        -e 's/scanned  *out//g' \
+        -e 's/resilver  *in  *progress  *since/since/g' \
+        -e 's/in  *progress  *since/since/g' \
         -e 's/ *errors:  *No  *known  *data  *errors *//g' \
-        -e 's/\.  *pool  *will */./g' \
+        -e 's/\.  *The  *pool  *will *//g' \
+        -e 's/ *action:  *Wait  *for  *the  *resilver  *to  *complete\.//g' \
         -e 's/status:/~&/g' \
     | tr '\n' '~' | sed -e 's/~~*/~/g' | sed -e 's/@~/@/g' | tr '#' '\n' \
     | grep -v '^ *$'
