@@ -11,7 +11,7 @@ status_line()
         -e 's/ *scan:  *scrub  *repaired 0 in */done /g' \
         -e 's/ *scan:  *//g' \
         -e 's/scanned  *out//g' \
-        -e 's/resilver  *in  *progress  *since/since/g' \
+        -e 's/resilver  *in  *progress  *since/ since/g' \
         -e 's/in  *progress  *since/since/g' \
         -e 's/ *errors:  *No  *known  *data  *errors *//g' \
         -e 's/\.  *The  *pool  *will *//g' \
