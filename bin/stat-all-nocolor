@@ -1,0 +1,216 @@
+#!/bin/sh
+
+BINPATH=$HOME/bin
+
+line="DATE `date '+%Y-%m-%d %H:%M:%S %Z%z'`"
+echo -n "$line"
+if [ ${#line} -lt 40 ]; then
+	tab=""
+	for i in `seq ${#line} 40`; do
+		tab="$tab "
+	done
+fi
+echo -n "$tab"
+echo "HOST `hostname -f`"
+
+if [ -x ${BINPATH}/stat-gpg ]; then
+	${BINPATH}/stat-gpg
+fi
+
+case `uname -s` in
+	Darwin)
+		line=`uname -r -s`
+		echo "$line"
+	;;
+	FreeBSD)
+		line=`uname -i -p -r -s | tr -d '\n'`
+		echo -n "$line"
+		if [ ${#line} -lt 45 ]; then
+			tab=""
+			for i in `seq ${#line} 45`; do
+				tab="$tab "
+			done
+		fi
+		echo -n "$tab"
+		freebsd-version
+	;;
+esac
+
+if [ -x ${BINPATH}/ssh-finger ]; then
+	RSA="`${BINPATH}/ssh-finger`"
+	if [ -n "$RSA" ]; then
+		echo "RSA  $RSA"
+	fi
+fi
+
+if [ -x ${BINPATH}/ssh-finger-dsa ]; then
+	DSA="`${BINPATH}/ssh-finger-dsa`"
+	if [ -n "$DSA" ]; then
+		echo "DSA  $DSA"
+	fi
+fi
+
+case `uname -s` in
+	FreeBSD)
+		if [ -x ${BINPATH}/ssh-finger-ecdsa ]; then
+			ECD="`${BINPATH}/ssh-finger-ecdsa`"
+			if [ -n "$ECD" ]; then
+				echo "ECD  $ECD"
+			fi
+		fi
+		if [ -x ${BINPATH}/ssh-finger-ed25519 ]; then
+			ED2="`${BINPATH}/ssh-finger-ed25519`"
+			if [ -n "$ED2" ]; then
+				echo "ED2  $ED2"
+			fi
+		fi
+	;;
+esac
+
+tablestat() {
+
+if [ -x ${BINPATH}/stat-cpu ]; then
+	line="CPU  `${BINPATH}/stat-cpu`"
+	echo -n "$line"
+	if [ ${#line} -lt 6 ]; then
+		tab=". . . "
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-temperature ]; then
+	echo -n "$tab"
+	echo ". HEAT `${BINPATH}/stat-temperature`"
+fi
+
+if [ -x ${BINPATH}/stat-ram ]; then
+	line="RAM  `${BINPATH}/stat-ram`"
+	echo -n "$line"
+	if [ ${#line} -lt 6 ]; then
+		tab=". . . "
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-up ]; then
+	echo -n "$tab"
+	echo ". UPT  `${BINPATH}/stat-up`"
+fi
+
+if [ -x ${BINPATH}/stat-disk ]; then
+	line="HDD  `${BINPATH}/stat-disk`"
+	echo -n "$line"
+	if [ ${#line} -lt 6 ]; then
+		tab=". . . "
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-usr ]; then
+	echo -n "$tab"
+	echo ". USR  `${BINPATH}/stat-usr`"
+fi
+
+if [ -x ${BINPATH}/stat-swap ]; then
+	line="SWAP `${BINPATH}/stat-swap`"
+	echo -n "$line"
+	if [ ${#line} -lt 6 ]; then
+		tab=". . . "
+	fi
+fi
+
+if [ -x ${BINPATH}/stat-who ]; then
+	echo -n "$tab"
+	echo ". WHO  `${BINPATH}/stat-who`"
+fi
+
+}
+
+tablestat | column -t
+
+if [ -x ${BINPATH}/stat-zfs ]; then
+	# to keep output spacing
+	oldifs=$IFS
+	IFS=;
+	count=0
+	${BINPATH}/stat-zfs | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "ZFS "
+		else
+			echo -n "    "
+		fi
+		echo "$line"
+	done
+	IFS=$oldifs
+fi
+
+if [ -x ${BINPATH}/stat-ucarp ]; then
+	count=0
+	${BINPATH}/stat-ucarp | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "CARP  "
+		else
+			echo -n "      "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-net ]; then
+	count=0
+	${BINPATH}/stat-net | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "NET  "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-dhcpd ]; then
+	count=0
+	${BINPATH}/stat-dhcpd | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "DHCP  "
+		else
+			echo -n "      "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/stat-jail ]; then
+	count=0
+	${BINPATH}/stat-jail | while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "JAIL  "
+		else
+			echo -n "      "
+		fi
+		echo "$line"
+	done
+fi
+
+if [ -x ${BINPATH}/netconn ]; then
+	count=0
+	${BINPATH}/netconn \
+	| sed 's;ADDRESS;;g' | awk '{$4="";print}' \
+	| grep -v '^_ntp *ntpd.*:123$' \
+	| grep -v '^root *sendmail.*127.0.0.1:25' \
+	| grep -v '^root *syslogd.*127.0.0.1:514' \
+	| grep -v '^root *sshd.*\*:22' \
+	| grep -v '^root *ucarp.*udp4 *\*:\* *\*:\*\s*$' \
+	| column -t \
+	| while read line; do
+		count=$(( count + 1 ))
+		if [ $count -eq 1 ]; then
+			echo -n "CON  "
+		else
+			echo -n "     "
+		fi
+		echo "$line"
+	done
+fi
