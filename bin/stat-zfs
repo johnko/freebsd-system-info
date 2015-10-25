@@ -1,47 +1,29 @@
 #!/bin/sh
 
-NUMCHARACTERS=12
-
-ZFSLIST=`zpool status | egrep -o "pool\: ([[:alnum:]-]*)" | awk '{ print $NF }'`
-for a in ${ZFSLIST} ; do
-    echo -n "$a"
-    if [ ${#a} -lt $NUMCHARACTERS ]; then
-        tab=""
-        for i in `seq ${#a} $NUMCHARACTERS`; do
-            tab="$tab "
-        done
-    fi
-    echo -n "${tab}"
-
-    line=`zfs list -H -o used $a 2>/dev/null`
-    echo -n "$line"
-    if [ ${#line} -lt 7 ]; then
-        tab=""
-        for i in `seq ${#line} 7`; do
-            tab="$tab "
-        done
-    fi
-    echo -n "${tab}"
-
-    line=`zfs list -H -o available $a 2>/dev/null`
-    echo -n "$line"
-    if [ ${#line} -lt 7 ]; then
-        tab=""
-        for i in `seq ${#line} 7`; do
-            tab="$tab "
-        done
-    fi
-    echo -n "${tab}"
-
-    zpool status ${a} | egrep '(state:|status:|action:|scan:|to go|% done|errors:)' \
+status_line()
+{
+    zpool status ${1} | egrep '(pool:|status:|action:|scan:|to go|% done|errors:)' \
     | sed -E 's/ *(Mon|Tue|Wed|Thu|Fri|Sat|Sun) */ /g' \
-    | sed -e 's/ *with 0 errors on */ /g' \
-          -e 's/ *scan:  *resilvered  *[0-9][0-9]*[A-Z] in */done /g' \
-          -e 's/ *scan:  *scrub  *repaired 0 in */done /g' \
-          -e 's/ *state:  *ONLINE *//g' \
-          -e 's/ *errors:  *No  *known  *data  *errors *//g' \
-          -e 's/\.  *pool  *will */./g' \
-          -e 's/scan: *scrub/~  &/g' \
-          -e 's/status:/~&/g' \
-    | grep -v '^ *$' | tr '~' '\n'
+    | sed -e 's/pool:  *.*/#&@/g' \
+        -e 's/ *pool:  *//g' \
+        -e 's/ *with 0 errors on */ /g' \
+        -e 's/ *scan:  *resilvered  *[0-9][0-9]*[A-Z] in */done /g' \
+        -e 's/ *scan:  *scrub  *repaired 0 in */done /g' \
+        -e 's/ *scan:  *//g' \
+        -e 's/in progress since/since/g' \
+        -e 's/ *errors:  *No  *known  *data  *errors *//g' \
+        -e 's/\.  *pool  *will */./g' \
+        -e 's/status:/~&/g' \
+    | tr '\n' '~' | sed -e 's/~~*/~/g' | sed -e 's/@~/@/g' | tr '#' '\n' \
+    | grep -v '^ *$'
+}
+#status_line
+
+SEDARGS=""
+ZPOOLLIST=`zpool list -H -o name`
+for i in ${ZPOOLLIST} ; do
+    SEDARGS=$( status_line | sed -e 's/  */ /g' | tr ' ' '#' | awk -F@ '{print "-es@"$1"$@"$2"@"}' | tr -d '~' | grep -v '^ *$' )
 done
+#echo ${SEDARGS}
+
+zpool list -H -o name,size,allocated,free,health,name $a 2>/dev/null | sort | column -t | sed -E $SEDARGS | tr '#' ' '
