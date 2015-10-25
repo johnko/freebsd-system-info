@@ -65,4 +65,17 @@ ram-used() {
   esac
 }
 
-echo $( ram-total )"G "$( ram-used )"G "$( ram-free )"G"
+ram-percent() {
+  case `uname -s` in
+    Darwin)
+      echo $( ram-used )" "$( ram-total ) | \
+      awk '{ printf "%.1f\n", $1 * 100 / $2 }'
+    ;;
+    FreeBSD)
+        echo $( ram-used )" "$( ram-total ) | \
+        awk '{ printf "%.1f\n", $1 * 100 / $2 }'
+    ;;
+  esac
+}
+
+echo $( ram-total )"G "$( ram-used )"G "$( ram-free )"G "$( ram-percent )"%"

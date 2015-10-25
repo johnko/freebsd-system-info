@@ -86,13 +86,13 @@ if [ -x ${BINPATH}/stat-ram ]; then
 	line="RAM  `${BINPATH}/stat-ram`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
-		tab=". . . "
+		tab=". . . . "
 	fi
 fi
 
 if [ -x ${BINPATH}/stat-up ]; then
 	echo -n "$tab"
-	echo ". UPT  `${BINPATH}/stat-up`"
+	echo "UPT  `${BINPATH}/stat-up`"
 fi
 
 if [ -x ${BINPATH}/stat-disk ]; then
