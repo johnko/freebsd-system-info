@@ -2,4 +2,4 @@
 
 BINPATH=$HOME/bin
 
-stat-all-nocolor | grep -E --color 'scrub|UNAVAIL|DEGRADED|FAULTED|[0-9][0-9.]*[BKMGT]/s|0h0m to go|[1-9][0-9.]*%|$'
+stat-all-nocolor | grep -E --color 'scrub|UNAVAIL|DEGRADED|FAULTED|[0-9][0-9.]*[BKMGT]/s|[0-9][0-9a-zA-Z.]* to go|[1-9][0-9.]*%|$'
