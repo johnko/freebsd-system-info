@@ -1,7 +1,5 @@
 #!/bin/sh
 
-BINPATH=$HOME/bin
-
 line="DATE `date '+%Y-%m-%d %H:%M:%S %Z%z'`"
 echo -n "$line"
 if [ ${#line} -lt 40 ]; then
@@ -13,7 +11,7 @@ fi
 echo -n "$tab"
 echo "HOST `hostname -f`"
 
-if [ -x ${BINPATH}/stat-gpg ]; then
+if which stat-gpg >/dev/null 2>&1 ; then
 	${BINPATH}/stat-gpg
 fi
 
@@ -36,14 +34,14 @@ case `uname -s` in
 	;;
 esac
 
-if [ -x ${BINPATH}/ssh-finger ]; then
+if which ssh-finger >/dev/null 2>&1 ; then
 	RSA="`${BINPATH}/ssh-finger`"
 	if [ -n "$RSA" ]; then
 		echo "RSA  $RSA"
 	fi
 fi
 
-if [ -x ${BINPATH}/ssh-finger-dsa ]; then
+if which ssh-finger-dsa >/dev/null 2>&1 ; then
 	DSA="`${BINPATH}/ssh-finger-dsa`"
 	if [ -n "$DSA" ]; then
 		echo "DSA  $DSA"
@@ -52,13 +50,13 @@ fi
 
 case `uname -s` in
 	FreeBSD)
-		if [ -x ${BINPATH}/ssh-finger-ecdsa ]; then
+		if which ssh-finger-ecdsa >/dev/null 2>&1 ; then
 			ECD="`${BINPATH}/ssh-finger-ecdsa`"
 			if [ -n "$ECD" ]; then
 				echo "ECD  $ECD"
 			fi
 		fi
-		if [ -x ${BINPATH}/ssh-finger-ed25519 ]; then
+		if which ssh-finger-ed25519 >/dev/null 2>&1 ; then
 			ED2="`${BINPATH}/ssh-finger-ed25519`"
 			if [ -n "$ED2" ]; then
 				echo "ED2  $ED2"
@@ -69,7 +67,7 @@ esac
 
 tablestat() {
 
-if [ -x ${BINPATH}/stat-cpu ]; then
+if which stat-cpu >/dev/null 2>&1 ; then
 	line="CPU  `${BINPATH}/stat-cpu`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
@@ -77,12 +75,12 @@ if [ -x ${BINPATH}/stat-cpu ]; then
 	fi
 fi
 
-if [ -x ${BINPATH}/stat-temperature ]; then
+if which stat-temperature >/dev/null 2>&1 ; then
 	echo -n "$tab"
 	echo ". HEAT `${BINPATH}/stat-temperature`"
 fi
 
-if [ -x ${BINPATH}/stat-ram ]; then
+if which stat-ram >/dev/null 2>&1 ; then
 	line="RAM  `${BINPATH}/stat-ram`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
@@ -90,12 +88,12 @@ if [ -x ${BINPATH}/stat-ram ]; then
 	fi
 fi
 
-if [ -x ${BINPATH}/stat-up ]; then
+if which stat-up >/dev/null 2>&1 ; then
 	echo -n "$tab"
 	echo "UPT  `${BINPATH}/stat-up`"
 fi
 
-if [ -x ${BINPATH}/stat-disk ]; then
+if which stat-disk >/dev/null 2>&1 ; then
 	line="HDD  `${BINPATH}/stat-disk`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
@@ -103,12 +101,12 @@ if [ -x ${BINPATH}/stat-disk ]; then
 	fi
 fi
 
-if [ -x ${BINPATH}/stat-usr ]; then
+if which stat-usr >/dev/null 2>&1 ; then
 	echo -n "$tab"
 	echo ". USR  `${BINPATH}/stat-usr`"
 fi
 
-if [ -x ${BINPATH}/stat-swap ]; then
+if which stat-swap >/dev/null 2>&1 ; then
 	line="SWAP `${BINPATH}/stat-swap`"
 	echo -n "$line"
 	if [ ${#line} -lt 6 ]; then
@@ -116,7 +114,7 @@ if [ -x ${BINPATH}/stat-swap ]; then
 	fi
 fi
 
-if [ -x ${BINPATH}/stat-who ]; then
+if which stat-who >/dev/null 2>&1 ; then
 	echo -n "$tab"
 	echo ". WHO  `${BINPATH}/stat-who`"
 fi
@@ -125,7 +123,7 @@ fi
 
 tablestat | column -t
 
-if [ -x ${BINPATH}/stat-zfs ]; then
+if which stat-zfs >/dev/null 2>&1 ; then
 	# to keep output spacing
 	oldifs=$IFS
 	IFS=;
@@ -142,7 +140,7 @@ if [ -x ${BINPATH}/stat-zfs ]; then
 	IFS=$oldifs
 fi
 
-if [ -x ${BINPATH}/stat-ucarp ]; then
+if which stat-ucarp >/dev/null 2>&1 ; then
 	count=0
 	${BINPATH}/stat-ucarp | while read line; do
 		count=$(( count + 1 ))
@@ -155,7 +153,7 @@ if [ -x ${BINPATH}/stat-ucarp ]; then
 	done
 fi
 
-if [ -x ${BINPATH}/stat-net ]; then
+if which stat-net >/dev/null 2>&1 ; then
 	count=0
 	${BINPATH}/stat-net | while read line; do
 		count=$(( count + 1 ))
@@ -168,7 +166,7 @@ if [ -x ${BINPATH}/stat-net ]; then
 	done
 fi
 
-if [ -x ${BINPATH}/stat-dhcpd ]; then
+if which stat-dhcpd >/dev/null 2>&1 ; then
 	count=0
 	${BINPATH}/stat-dhcpd | while read line; do
 		count=$(( count + 1 ))
@@ -181,7 +179,7 @@ if [ -x ${BINPATH}/stat-dhcpd ]; then
 	done
 fi
 
-if [ -x ${BINPATH}/stat-jail ]; then
+if which stat-jail >/dev/null 2>&1 ; then
 	count=0
 	${BINPATH}/stat-jail | while read line; do
 		count=$(( count + 1 ))
@@ -194,7 +192,7 @@ if [ -x ${BINPATH}/stat-jail ]; then
 	done
 fi
 
-if [ -x ${BINPATH}/netconn ]; then
+if which netconn >/dev/null 2>&1 ; then
 	count=0
 	${BINPATH}/netconn \
 	| sed 's;ADDRESS;;g' | awk '{$4="";print}' \
