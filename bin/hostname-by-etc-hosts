@@ -1,6 +1,8 @@
 #!/bin/sh
 
-HOSTIP=`ifconfig | grep -v 0xffffffff | grep -v 127.0.0.1 | egrep -o 'inet *([0-9]{1,3}\.){1,3}[0-9]{1,3}' | awk '{print $2}'`
+HOSTNIC=`net-nic`
+
+HOSTIP=`ifconfig $HOSTNIC | grep -v 0xffffffff | grep -v 127.0.0.1 | egrep -o 'inet *([0-9]{1,3}\.){1,3}[0-9]{1,3}' | awk '{print $2}'`
 
 NAMES=`cat /etc/hosts | grep "${HOSTIP} " | sed "s;${HOSTIP};;"`
 
