@@ -1,5 +1,10 @@
 #!/bin/sh
 
+zpoolliststatus(){
+    zpool list -o name,size,allocated,free,health $1
+    zpool status $1
+}
+
 USEDRAM=$( stat-ram | awk '{print $NF}' | sed 's/\..*//' )
 FREERAM=$( echo "100-$USEDRAM" | bc )
 
@@ -28,7 +33,7 @@ cat >/usr/local/www/data/json-poolspace.js <<EOF
 }]
 EOF
 
-zpool status pool >/usr/local/www/data/poolstatus.txt
+zpoolliststatus pool >/usr/local/www/data/poolstatus.txt
 
 #########################################
 
@@ -45,7 +50,7 @@ cat >/usr/local/www/data/json-tankspace.js <<EOF
 }]
 EOF
 
-zpool status tank >/usr/local/www/data/tankstatus.txt
+zpoolliststatus tank >/usr/local/www/data/tankstatus.txt
 
 #########################################
 
