@@ -1,0 +1,48 @@
+#!/bin/sh
+
+USEDRAM=$( stat-ram | awk '{print $NF}' | sed 's/\..*//' )
+FREERAM=$( echo "100-$USEDRAM" | bc )
+
+cat >/usr/local/www/data/json-ramusage.js <<EOF
+[{
+    "label": "Used",
+    "data": $USEDRAM
+},{
+    "label": "Free",
+    "data": $FREERAM
+}]
+EOF
+
+#########################################
+
+USEDPOOL=$( zpool list -H -o cap pool | sed 's/%.*//' )
+FREEPOOL=$( echo "100-$USEDPOOL" | bc )
+
+cat >/usr/local/www/data/json-poolspace.js <<EOF
+[{
+    "label": "Used",
+    "data": $USEDPOOL
+},{
+    "label": "Free",
+    "data": $FREEPOOL
+}]
+EOF
+
+zpool status pool >/usr/local/www/data/poolstatus.txt
+
+#########################################
+
+USEDTANK=$( zpool list -H -o cap tank | sed 's/%.*//' )
+FREETANK=$( echo "100-$USEDTANK" | bc )
+
+cat >/usr/local/www/data/json-tankspace.js <<EOF
+[{
+    "label": "Used",
+    "data": $USEDTANK
+},{
+    "label": "Free",
+    "data": $FREETANK
+}]
+EOF
+
+zpool status tank >/usr/local/www/data/tankstatus.txt
