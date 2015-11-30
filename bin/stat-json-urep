@@ -46,3 +46,18 @@ cat >/usr/local/www/data/json-tankspace.js <<EOF
 EOF
 
 zpool status tank >/usr/local/www/data/tankstatus.txt
+
+#########################################
+
+cat >/usr/local/www/data/json-snapshots.js.tmp <<EOF
+[
+EOF
+
+cat /usr/local/www/data/.snapshot.*.json >>/usr/local/www/data/json-snapshots.js.tmp
+
+cat >>/usr/local/www/data/json-snapshots.js.tmp <<EOF
+]
+EOF
+
+cat /usr/local/www/data/json-snapshots.js.tmp | tr -d "\n" | sed 's;,];];' >/usr/local/www/data/json-snapshots.js
+rm /usr/local/www/data/json-snapshots.js.tmp
