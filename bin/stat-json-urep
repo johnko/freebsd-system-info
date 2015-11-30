@@ -49,15 +49,18 @@ zpool status tank >/usr/local/www/data/tankstatus.txt
 
 #########################################
 
-cat >/usr/local/www/data/json-snapshots.js.tmp <<EOF
+if ls /usr/local/www/data/.snapshot.*.json >/dev/null 2>&1 ; then
+
+    cat >/usr/local/www/data/json-snapshots.js.tmp <<EOF
 [
 EOF
 
-cat /usr/local/www/data/.snapshot.*.json >>/usr/local/www/data/json-snapshots.js.tmp
+    cat /usr/local/www/data/.snapshot.*.json >>/usr/local/www/data/json-snapshots.js.tmp 2>/dev/null
 
-cat >>/usr/local/www/data/json-snapshots.js.tmp <<EOF
+    cat >>/usr/local/www/data/json-snapshots.js.tmp <<EOF
 ]
 EOF
 
-cat /usr/local/www/data/json-snapshots.js.tmp | tr -d "\n" | sed 's;,];];' >/usr/local/www/data/json-snapshots.js
-rm /usr/local/www/data/json-snapshots.js.tmp
+    cat /usr/local/www/data/json-snapshots.js.tmp | tr -d "\n" | sed 's;,];];' >/usr/local/www/data/json-snapshots.js
+    rm /usr/local/www/data/json-snapshots.js.tmp
+fi
