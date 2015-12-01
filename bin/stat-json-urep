@@ -7,7 +7,6 @@ zpoolliststatus(){
 
 USEDRAM=$( stat-ram | awk '{print $NF}' | sed 's/\..*//' )
 FREERAM=$( echo "100-$USEDRAM" | bc )
-
 cat >/usr/local/www/data/json-ramusage.js <<EOF
 [{
     "label": "Used",
@@ -20,10 +19,10 @@ EOF
 
 #########################################
 
-USEDPOOL=$( zpool list -H -o cap pool | sed 's/%.*//' )
-FREEPOOL=$( echo "100-$USEDPOOL" | bc )
-
-cat >/usr/local/www/data/json-poolspace.js <<EOF
+if              zpool list -H -o cap pool >/dev/null 2>&1 ; then
+    USEDPOOL=$( zpool list -H -o cap pool | sed 's/%.*//' )
+    FREEPOOL=$( echo "100-$USEDPOOL" | bc )
+    cat >/usr/local/www/data/json-poolspace.js <<EOF
 [{
     "label": "Used",
     "data": $USEDPOOL
@@ -32,15 +31,19 @@ cat >/usr/local/www/data/json-poolspace.js <<EOF
     "data": $FREEPOOL
 }]
 EOF
-
-zpoolliststatus pool >/usr/local/www/data/poolstatus.txt
+else
+    # remove if there is an error
+    rm /usr/local/www/data/json-poolspace.js
+fi
+# log error too
+zpoolliststatus pool >/usr/local/www/data/poolstatus.txt 2>&1
 
 #########################################
 
-USEDTANK=$( zpool list -H -o cap tank | sed 's/%.*//' )
-FREETANK=$( echo "100-$USEDTANK" | bc )
-
-cat >/usr/local/www/data/json-tankspace.js <<EOF
+if              zpool list -H -o cap tank >/dev/null 2>&1 ; then
+    USEDTANK=$( zpool list -H -o cap tank | sed 's/%.*//' )
+    FREETANK=$( echo "100-$USEDTANK" | bc )
+    cat >/usr/local/www/data/json-tankspace.js <<EOF
 [{
     "label": "Used",
     "data": $USEDTANK
@@ -49,23 +52,23 @@ cat >/usr/local/www/data/json-tankspace.js <<EOF
     "data": $FREETANK
 }]
 EOF
-
-zpoolliststatus tank >/usr/local/www/data/tankstatus.txt
+else
+    # remove if there is an error
+    rm /usr/local/www/data/json-tankspace.js
+fi
+# log error too
+zpoolliststatus tank >/usr/local/www/data/tankstatus.txt 2>&1
 
 #########################################
 
 if ls /usr/local/www/data/.snapshot.*.json >/dev/null 2>&1 ; then
-
     cat >/usr/local/www/data/json-snapshots.js.tmp <<EOF
 [
 EOF
-
     cat /usr/local/www/data/.snapshot.*.json >>/usr/local/www/data/json-snapshots.js.tmp 2>/dev/null
-
     cat >>/usr/local/www/data/json-snapshots.js.tmp <<EOF
 ]
 EOF
-
     cat /usr/local/www/data/json-snapshots.js.tmp | tr -d "\n" | sed 's;,];];' >/usr/local/www/data/json-snapshots.js
     rm /usr/local/www/data/json-snapshots.js.tmp
 fi
