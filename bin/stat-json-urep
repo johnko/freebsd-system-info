@@ -22,7 +22,7 @@ EOF
 if              zpool list -H -o cap pool >/dev/null 2>&1 ; then
     USEDPOOL=$( zpool list -H -o cap pool | sed 's/%.*//' )
     FREEPOOL=$( echo "100-$USEDPOOL" | bc )
-    cat >/usr/local/www/data/json-poolspace.js <<EOF
+    cat >/usr/local/www/data/json-poolusage.js <<EOF
 [{
     "label": "Used",
     "data": $USEDPOOL
@@ -33,7 +33,7 @@ if              zpool list -H -o cap pool >/dev/null 2>&1 ; then
 EOF
 else
     # remove if there is an error
-    rm /usr/local/www/data/json-poolspace.js
+    rm /usr/local/www/data/json-poolusage.js
 fi
 # log error too
 zpoolliststatus pool >/usr/local/www/data/poolstatus.txt 2>&1
@@ -43,7 +43,7 @@ zpoolliststatus pool >/usr/local/www/data/poolstatus.txt 2>&1
 if              zpool list -H -o cap tank >/dev/null 2>&1 ; then
     USEDTANK=$( zpool list -H -o cap tank | sed 's/%.*//' )
     FREETANK=$( echo "100-$USEDTANK" | bc )
-    cat >/usr/local/www/data/json-tankspace.js <<EOF
+    cat >/usr/local/www/data/json-tankusage.js <<EOF
 [{
     "label": "Used",
     "data": $USEDTANK
@@ -54,7 +54,7 @@ if              zpool list -H -o cap tank >/dev/null 2>&1 ; then
 EOF
 else
     # remove if there is an error
-    rm /usr/local/www/data/json-tankspace.js
+    rm /usr/local/www/data/json-tankusage.js
 fi
 # log error too
 zpoolliststatus tank >/usr/local/www/data/tankstatus.txt 2>&1
